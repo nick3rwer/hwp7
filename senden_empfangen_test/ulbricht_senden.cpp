@@ -58,6 +58,7 @@ int main ()
 	while(true)
 	{
         uint8_t byte = data_to_send[0];
+        cout << "Sende Byte: " << bitset<8>(byte) << endl;
 		sende(byte);
         if(!data_to_send.empty()){
             data_to_send.erase(data_to_send.begin());
