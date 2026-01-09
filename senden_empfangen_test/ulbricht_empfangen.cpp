@@ -23,8 +23,6 @@ bool vollständige_überprüfung(uint8_t nibble1, uint8_t nibble2){
 }    return false;
 }
 
-
-
 string read(vector<uint8_t> received_nibbles){
     string original_data;
     for (int i = 0; i < received_nibbles.size(); i += 2) {
@@ -45,16 +43,23 @@ int main ()
 {
 B15F & drv = B15F :: getInstance() ; //drv wird ein Objekt einer Klasse
 vector<uint8_t> data_to_receive;
+cout << "Warte auf Daten..." << endl;
+uint8_t vorgaenger = 0b11111111;
 	while (1)
-	{
+	{   
 		uint8_t empfangen = (( int ) drv.getRegister (& PINA ) ) ;
-		data_to_receive.push_back(empfangen);
-		if(empfangen & (1u << 6)){
+		if(vorgaenger != empfangen && empfangen != 0b0){
+                if(vollständige_überprüfung(vorgaenger, empfangen)){
+                    uint8_t original_byte = (empfangen & 0b00001111) << 4 | (vorgaenger & 0b00001111);
+                    cout<<static_cast<char>(original_byte);
+                }
+            }
+        
+            if(empfangen & (1u << 6)){
 			break;
 		}
-		drv.delay_ms(10);
+		drv.delay_ms(50);
+        vorgaenger = empfangen;
 	}
-	string original_data = read(data_to_receive);
-	cout << "Empfangene Daten: " << original_data << endl;
+    cout << endl << "Datenübertragung abgeschlossen." << endl;
 }
-//se

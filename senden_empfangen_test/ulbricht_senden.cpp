@@ -9,6 +9,7 @@
 using namespace std ;
 B15F & drv = B15F :: getInstance () ; //drv wird ein Objekt einer Klasse
 
+
 uint8_t control_bit_setzten(uint8_t byte){
     if (byte & 0x01) {
         return byte | (1u << 4);
@@ -36,35 +37,27 @@ vector<uint8_t> fragmentiere(string data){
         cout << "Nibble 1: " << bitset<8>(nibble1) << endl;
         cout << "Nibble 2: " << bitset<8>(nibble2) << endl;
         cout << "--- Ueberpruefung ---" << endl;*/
+
         result.push_back(nibble1);
         result.push_back(nibble2);
     }
     return result;
 }
 
-void sende(uint8_t byte){
-	drv.delay_ms(10);
+void write(uint8_t byte){
+	drv.delay_ms(50);
 	drv.setRegister(& PORTA , byte) ;
 }
 
 int main ()
 {
-	drv.setRegister(& DDRA , 0b10000000);
-	string input_data = "Hello";
-    string error_code = "a";
-    string green_code = "b";
+	drv.setRegister(& DDRA , 0b11111111);
+	string input_data = "lbrecht Dürer der Jüngere (auch Duerer; latinisiert Albertus Durerus; * 21. Mai 1471 in Nürnberg; † 6. April 1528 ebenda) war ein deutscher Maler, Grafiker, Mathematiker und Kunsttheoretiker. Mit seinen konsequent signierten Gemälden, Zeichnungen sowie den große Verbreitung findenden Kupferstichen und Holzschnitten zählt er zu den herausragenden Vertretern der Renaissance. Seine Landschaftsaquarelle zählen zu den frühesten ihrer Gattung; gleiches gilt für seine Selbstporträts und seine Aktzeichnungen. ";
 	vector<uint8_t> data_to_send;
     data_to_send = fragmentiere(input_data);
-	while(true)
+	for(auto byte : data_to_send)
 	{
-        uint8_t byte = data_to_send[0];
-        cout << "Sende Byte: " << bitset<8>(byte) << endl;
-		sende(byte);
-        if(!data_to_send.empty()){
-            data_to_send.erase(data_to_send.begin());
-        } else {
-            break;
+        //cout << "Sende Byte: " << bitset<8>(byte) << endl;
+		write(byte);
 	}
-}
-    return 0 ;
 }
