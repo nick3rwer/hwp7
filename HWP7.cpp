@@ -161,3 +161,4 @@ int main(){
     std::cout.write(reinterpret_cast<const char*>(ZuErhalten.data()), ZuErhalten.size());
     std::cout.flush();
 }
+//david ist ein netter kerl
