@@ -63,3 +63,4 @@ uint8_t vorgaenger = 0b11111111;
 	}
     cout << endl << "Datenübertragung abgeschlossen." << endl;
 }
+//Ende main
